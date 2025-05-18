@@ -19,7 +19,8 @@ file(GLOB_RECURSE SOURCES_FILE
 # 排除不想要的文件
 list(FILTER SOURCES_FILE EXCLUDE REGEX ".*stm32f4xx_(dma2d|fmc|ltdc)\\.c$")
 
-
 add_library(fwlib STATIC ${SOURCES_FILE})
 target_compile_definitions(fwlib PUBLIC ${FWLIB_DEFINE})
 target_include_directories(fwlib PUBLIC ${INCLUDE_DIR})
+
+include_directories(${INCLUDE_DIR})

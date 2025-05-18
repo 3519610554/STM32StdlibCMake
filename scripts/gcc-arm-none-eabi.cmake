@@ -7,13 +7,7 @@ set(CMAKE_CXX_COMPILER_ID GNU)
 set(CMAKE_C_COMPILER_ID GNU)
 set(CMAKE_CXX_COMPILER_ID GNU)
 
-# set(TOOLCHAIN_PATH "C:/Software/ProgrammableTools/Toolchain/gcc/gcc-arm/arm-gnu-toolchain-14.2.rel1-mingw-w64-i686-arm-none-eabi/bin")
-
-# 获取编译器的目录路径
-get_filename_component(TOOLCHAIN_PATH ${CMAKE_C_COMPILER} DIRECTORY)
-
-# 获取 toolchain 目录的上一级
-get_filename_component(TOOLCHAIN_ROOT ${TOOLCHAIN_PATH} DIRECTORY)
+set(TOOLCHAIN_INCLUDE /usr/lib/arm-none-eabi/include)
 
 # Some default GCC settings
 # arm-none-eabi- must be part of path environment

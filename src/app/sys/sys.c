@@ -1,6 +1,6 @@
 #include "sys.h"
 #include "debug.h"
-#include "Timer.h"
+#include "timer.h"
 
 void NVIC_Config(void){
 

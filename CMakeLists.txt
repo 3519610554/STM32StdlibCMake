@@ -21,24 +21,11 @@ message(STATUS "FRAMEWORK_NAME: ${CMAKE_PROJECT_NAME}")
 #告诉CMake 需要支持C 和 汇编
 enable_language(C ASM)
 
-add_executable(${PROJECT_NAME})
-
 add_subdirectory(lib)
-add_subdirectory(src)
-
-set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES ADDITIONAL_CLEAN_FILES ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.map)
+add_subdirectory(src/app)
 
 if((CMAKE_C_STANDARD EQUAL 90) OR (CMAKE_C_STANDARD EQUAL 99))
     message(ERROR "Generated code requires C11 or higher")
 endif()
 
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND arm-none-eabi-objcopy -O binary ${CMAKE_PROJECT_NAME}.elf ${CMAKE_PROJECT_NAME}.bin
-    COMMENT "Generating ${CMAKE_PROJECT_NAME}.bin"
-)
-
-add_custom_command(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E env python ${CMAKE_SOURCE_DIR}/scripts/OpenocdTools.py debug ${CMAKE_BUILD_TYPE} ${CMAKE_SOURCE_DIR} ${CMAKE_PROJECT_NAME}
-        
-    COMMENT "Running Python script after build"
-)
+INSTALL(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION bin)
