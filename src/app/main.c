@@ -1,30 +1,28 @@
-#include "main.h"
-#include "delay.h"
-#include "timer.h"
+#include "sys.h"
 #include "debug.h"
+#include "delay.h"
+#include "bsp_led.h"
+#include "timer.h"
+#include <stdio.h>
 
-uint16_t tx_Timer = 0;
+uint8_t rx_buff[SERIAL_LEN_MAX];
+uint16_t led_Timer = 0;
 
 int main(void){
 
     NVIC_Config();
-    timer_Init();
-    U1_Init(115200);
-    timer_loading(&tx_Timer, 2000);
-
+    Serial_Init(115200);
+    led_Init();
+    Timer_Init();
+    Debug_Printf("STM32 模板实验\r\n");
     while(1){
-        if (timer_get_sub(tx_Timer) == 0){
-            debug_Printf("你好 CMake\r\n");
-            timer_loading(&tx_Timer, 2000);
+        if (Timer_get_sub(led_Timer) == 0){
+            LED_TOGGLE(LED_PIN);
+            Debug_Printf("你好世界\r\n");
+            Timer_loading(&led_Timer, 500);
         }
-        if (U1CB.URxDataIN != U1CB.URxDataOUT){
-            debug_Printf("本次接收了%d字节数据\r\n", U1CB.URxDataOUT->end - U1CB.URxDataOUT->start + 1);
-            debug_Printf("%s\r\n", U1CB.URxDataOUT->start);
-            U1CB.URxDataOUT ++;
-            if (U1CB.URxDataOUT == U1CB.URxDataEND){
-                U1CB.URxDataOUT = &U1CB.URxDataPtr[0];
-            }
-
+        if (Serial_ReadData(rx_buff)){
+            Debug_Printf("%s\r\n", rx_buff);
         }
     }
 }

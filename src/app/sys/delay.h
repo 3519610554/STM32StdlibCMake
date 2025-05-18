@@ -1,10 +1,11 @@
-#ifndef __DELAY_H
-#define __DELAY_H 		
-	   
-# include "sys.h"	  
+#ifndef _DELAY_H
+#define _DELAY_H
 
-void delay_us(uint32_t xus);
-void delay_ms(uint32_t xms);
-void delay_s(uint32_t xs);
+#include "sys.h"
+
+/*----------------------函数定义----------------------*/
+void delay_us(uint32_t xus);                    //微妙延时
+void delay_ms(uint32_t xms);                    //毫秒延时
+void delay_s(uint32_t xs);                      //秒延时
 
 #endif

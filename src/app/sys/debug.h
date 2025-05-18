@@ -1,27 +1,31 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-#include "sys.h"
+#include "stm32l1xx.h"
 #include <stdarg.h>
 
-#define U1_TX_SIZE          (2*1024)
-#define U1_RX_SIZE          (2*1024)
-#define U1_RX_MAX           256
-#define U1_NUM              10
+#define SERIAL_LEN_MAX      (128-1)
 
 typedef struct{
-    uint16_t        UxCounter;
-    UCB_URxBuffptr  URxDataPtr[U1_NUM];
-    UCB_URxBuffptr  *URxDataIN;
-    UCB_URxBuffptr  *URxDataOUT;
-    UCB_URxBuffptr  *URxDataEND;
-}U1_CB;
+    // 串口发送缓存区
+    uint8_t buff[SERIAL_LEN_MAX];   
+    // 串口发送忙碌标志位   1 忙碌      0 空闲
+    uint8_t busy;                   
+}_USART_TX_;
 
-extern U1_CB  U1CB;
-extern uint8_t U1_RxBuff[U1_RX_SIZE];
+typedef struct{
+    // 串口接收缓存区
+    uint8_t buff[SERIAL_LEN_MAX];   
+    // 串口接收完成标志位   1 接收完成  0 接收未完成
+    uint8_t finish;        
+    // 串口接收长度         
+    uint8_t len;                    
+}_USART_RX_;
 
-void        U1_Init(uint32_t bound);
-uint8_t     U1_IRQChannel(void);
-void        debug_Printf(char *format, ...);
+void    Serial_Init(uint32_t bound);
+void    Serial_IRQ_Init(NVIC_InitTypeDef NVIC_InitStructure);
+void    Serial_DMA_Send(uint8_t *str,uint16_t len);
+uint8_t Serial_ReadData(uint8_t *rx_buff);
+void    Debug_Printf(char *format, ...);
 
 #endif
